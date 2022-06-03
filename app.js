@@ -30,7 +30,6 @@ const exitHandler = () => {
 };
 
 const unexpectedErrorHandler = (error) => {
-    logger.error(error);
     exitHandler();
 };
 
@@ -78,7 +77,13 @@ const deleteSubscriptionBySubscriptionId=async (subscription_id)=>{
 }
 
 
-
+const createStripeCustomer = async ()=>{
+    const stripe = require('stripe')('sk_test_51L5Yc7Jngle5KEdgd9M1AaGCTS1ykSc3r2rleOJIvlBybzCAuMrrMwgQkMts4dcdwbvfbXx2qtCAJ5y9PPF0DUib00EKCPOw1P');
+    const customer = await stripe.customers.create({
+        description: 'My First Test Customer (created for API docs at https://www.stripe.com/docs/api)',
+      });
+      return
+}
 
 
 
@@ -99,7 +104,7 @@ switch (event.type) {
         const subscriptionCreated = event.data.object;
         const {user_id}=subscriptionCreated.metadata;
         updateUserSubscriptionByUserId(user_id,subscriptionCreated.id, subscriptionCreated.status)
-        break;
+        break;    
     case 'customer.subscription.trial_will_end':
         break;
     case 'customer.subscription.updated':
@@ -118,14 +123,16 @@ switch (event.type) {
         const invoicePaid = event.data.object;
         updateSubscriptionBySubscriptionId(invoicePaid.subscription, "active");
         break;
+
     default:
         console.log(`Unhandled event type ${event.type}`);
 }
 
-response.json({received: true});
+response.json({received: true,event:event.type});
 });
 
 app.get('/', (req, res) => {
     res.json({success: true, msg: "server is running"})
 })
+
 
