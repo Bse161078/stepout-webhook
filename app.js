@@ -78,7 +78,7 @@ const deleteSubscriptionBySubscriptionId=async (subscription_id)=>{
 
 
 const createStripeCustomer = async ()=>{
-    const stripe = require('stripe')('sk_test_51L5Yc7Jngle5KEdgd9M1AaGCTS1ykSc3r2rleOJIvlBybzCAuMrrMwgQkMts4dcdwbvfbXx2qtCAJ5y9PPF0DUib00EKCPOw1P');
+    const stripe = require('stripe')('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');
     const customer = await stripe.customers.create({
         description: 'My First Test Customer (created for API docs at https://www.stripe.com/docs/api)',
       });
